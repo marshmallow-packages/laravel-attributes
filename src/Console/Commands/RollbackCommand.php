@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rinvex\Attributes\Console\Commands;
+namespace Marshmallow\Attributes\Console\Commands;
 
 use Illuminate\Console\Command;
 
@@ -13,14 +13,14 @@ class RollbackCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'rinvex:rollback:attributes {--f|force : Force the operation to run when in production.}';
+    protected $signature = 'marshmallow:rollback:attributes {--f|force : Force the operation to run when in production.}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Rollback Rinvex Attributes Tables.';
+    protected $description = 'Rollback Marshmallow Attributes Tables.';
 
     /**
      * Execute the console command.
@@ -31,9 +31,9 @@ class RollbackCommand extends Command
     {
         $this->alert($this->description);
 
-        $path = config('rinvex.attributes.autoload_migrations') ?
-            'vendor/rinvex/laravel-attributes/database/migrations' :
-            'database/migrations/rinvex/laravel-attributes';
+        $path = config('marshmallow-attributes.autoload_migrations') ?
+            'vendor/marshmallow/laravel-attributes/database/migrations' :
+            'database/migrations/marshmallow/laravel-attributes';
 
         if (file_exists($path)) {
             $this->call('migrate:reset', [
@@ -41,7 +41,7 @@ class RollbackCommand extends Command
                 '--force' => $this->option('force'),
             ]);
         } else {
-            $this->warn('No migrations found! Consider publish them first: <fg=green>php artisan rinvex:publish:attributes</>');
+            $this->warn('No migrations found! Consider publish them first: <fg=green>php artisan marshmallow:publish:attributes</>');
         }
 
         $this->line('');

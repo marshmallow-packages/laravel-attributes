@@ -15,12 +15,12 @@ class CreateAttributesTable extends Migration
      */
     public function up(): void
     {
-        Schema::create(config('rinvex.attributes.tables.attributes'), function (Blueprint $table) {
+        Schema::create(config('marshmallow-attributes.tables.attributes'), function (Blueprint $table) {
             // Columns
             $table->increments('id');
             $table->string('slug');
-            $table->json('name');
-            $table->json('description')->nullable();
+            $table->text('name');
+            $table->mediumText('description')->nullable();
             $table->mediumInteger('sort_order')->unsigned()->default(0);
             $table->string('group')->nullable();
             $table->string('type');
@@ -41,6 +41,6 @@ class CreateAttributesTable extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists(config('rinvex.attributes.tables.attributes'));
+        Schema::dropIfExists(config('marshmallow-attributes.tables.attributes'));
     }
 }

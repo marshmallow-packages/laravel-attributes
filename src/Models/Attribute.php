@@ -2,20 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Rinvex\Attributes\Models;
+namespace Marshmallow\Attributes\Models;
 
 use Illuminate\Support\Str;
 use Spatie\Sluggable\SlugOptions;
-use Rinvex\Support\Traits\HasSlug;
 use Spatie\EloquentSortable\Sortable;
 use Illuminate\Database\Eloquent\Model;
-use Rinvex\Support\Traits\HasTranslations;
-use Rinvex\Support\Traits\ValidatingTrait;
+use Marshmallow\Attributes\Traits\HasSlug;
 use Spatie\EloquentSortable\SortableTrait;
+use Marshmallow\Attributes\Traits\ValidatingTrait;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * Rinvex\Attributes\Models\Attribute.
+ * Marshmallow\Attributes\Models\Attribute.
  *
  * @property int                 $id
  * @property string              $slug
@@ -30,28 +29,27 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property array               $entities
- * @property-read \Rinvex\Attributes\Support\ValueCollection|\Rinvex\Attributes\Models\Value[] $values
+ * @property-read \Marshmallow\Attributes\Support\ValueCollection|\Marshmallow\Attributes\Models\Value[] $values
  *
- * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Attributes\Models\Attribute ordered($direction = 'asc')
- * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Attributes\Models\Attribute whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Attributes\Models\Attribute whereDefault($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Attributes\Models\Attribute whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Attributes\Models\Attribute whereGroup($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Attributes\Models\Attribute whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Attributes\Models\Attribute whereIsCollection($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Attributes\Models\Attribute whereIsRequired($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Attributes\Models\Attribute whereSlug($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Attributes\Models\Attribute whereSortOrder($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Attributes\Models\Attribute whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Attributes\Models\Attribute whereType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Attributes\Models\Attribute whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Marshmallow\Attributes\Models\Attribute ordered($direction = 'asc')
+ * @method static \Illuminate\Database\Eloquent\Builder|\Marshmallow\Attributes\Models\Attribute whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Marshmallow\Attributes\Models\Attribute whereDefault($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Marshmallow\Attributes\Models\Attribute whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Marshmallow\Attributes\Models\Attribute whereGroup($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Marshmallow\Attributes\Models\Attribute whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Marshmallow\Attributes\Models\Attribute whereIsCollection($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Marshmallow\Attributes\Models\Attribute whereIsRequired($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Marshmallow\Attributes\Models\Attribute whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Marshmallow\Attributes\Models\Attribute whereSortOrder($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Marshmallow\Attributes\Models\Attribute whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Marshmallow\Attributes\Models\Attribute whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Marshmallow\Attributes\Models\Attribute whereUpdatedAt($value)
  * @mixin \Eloquent
  */
 class Attribute extends Model implements Sortable
 {
     use HasSlug;
     use SortableTrait;
-    use HasTranslations;
     use ValidatingTrait;
 
     /**
@@ -94,14 +92,6 @@ class Attribute extends Model implements Sortable
     /**
      * {@inheritdoc}
      */
-    public $translatable = [
-        'name',
-        'description',
-    ];
-
-    /**
-     * {@inheritdoc}
-     */
     public $sortable = [
         'order_column_name' => 'sort_order',
     ];
@@ -135,17 +125,17 @@ class Attribute extends Model implements Sortable
      */
     public function __construct(array $attributes = [])
     {
-        $this->setTable(config('rinvex.attributes.tables.attributes'));
+        $this->setTable(config('marshmallow-attributes.tables.attributes'));
         $this->mergeRules([
-            'name' => 'required|string|strip_tags|max:150',
+            'name' => 'required|string|max:150',
             'description' => 'nullable|string|max:32768',
-            'slug' => 'required|alpha_dash|max:150|unique:'.config('rinvex.attributes.tables.attributes').',slug',
+            'slug' => 'required|alpha_dash|max:150|unique:' . config('marshmallow-attributes.tables.attributes') . ',slug',
             'sort_order' => 'nullable|integer|max:100000',
-            'group' => 'nullable|string|strip_tags|max:150',
-            'type' => 'required|string|strip_tags|max:150',
+            'group' => 'nullable|string|max:150',
+            'type' => 'required|string|max:150',
             'is_required' => 'sometimes|boolean',
             'is_collection' => 'sometimes|boolean',
-            'default' => 'nullable|string|strip_tags|max:32768',
+            'default' => 'nullable|string|max:32768',
         ]);
 
         parent::__construct($attributes);
@@ -216,7 +206,7 @@ class Attribute extends Model implements Sortable
     {
         static::saved(function ($model) use ($entities) {
             $this->entities()->delete();
-            ! $entities || $this->entities()->createMany(array_map(function ($entity) {
+            !$entities || $this->entities()->createMany(array_map(function ($entity) {
                 return ['entity_type' => $entity];
             }, $entities));
         });
@@ -230,10 +220,10 @@ class Attribute extends Model implements Sortable
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
-                          ->usingSeparator('_')
-                          ->doNotGenerateSlugsOnUpdate()
-                          ->generateSlugsFrom('name')
-                          ->saveSlugsTo('slug');
+            ->usingSeparator('_')
+            ->doNotGenerateSlugsOnUpdate()
+            ->generateSlugsFrom('name')
+            ->saveSlugsTo('slug');
     }
 
     /**
@@ -243,7 +233,7 @@ class Attribute extends Model implements Sortable
      */
     public function entities(): HasMany
     {
-        return $this->hasMany(config('rinvex.attributes.models.attribute_entity'), 'attribute_id', 'id');
+        return $this->hasMany(config('marshmallow-attributes.models.attribute_entity'), 'attribute_id', 'id');
     }
 
     /**
@@ -256,5 +246,15 @@ class Attribute extends Model implements Sortable
     public function values(string $value): HasMany
     {
         return $this->hasMany($value, 'attribute_id', 'id');
+    }
+
+    /**
+     * Get the entities attached to this attribute.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function attributeEntities(): HasMany
+    {
+        return parent::entities();
     }
 }

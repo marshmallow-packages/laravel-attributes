@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Rinvex\Attributes\Tests\Feature;
+namespace Marshmallow\Attributes\Tests\Feature;
 
-use Rinvex\Attributes\Tests\Stubs\User;
+use Marshmallow\Attributes\Tests\Stubs\User;
 
 class AttributeCreationTest extends TestCase
 {
@@ -54,7 +54,7 @@ class AttributeCreationTest extends TestCase
 
     protected function createAttribute($attributes = [])
     {
-        return app('rinvex.attributes.attribute')->create(array_merge([
+        return app('marshmallow-attributes.attribute')->create(array_merge([
             'type' => 'integer',
             'name' => 'Count',
             'entities' => [User::class],

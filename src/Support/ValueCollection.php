@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rinvex\Attributes\Support;
+namespace Marshmallow\Attributes\Support;
 
 use Illuminate\Database\Eloquent\Model;
-use Rinvex\Attributes\Models\Attribute;
+use Marshmallow\Attributes\Models\Attribute;
 use Illuminate\Support\Collection as BaseCollection;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 
@@ -21,7 +21,7 @@ class ValueCollection extends EloquentCollection
     /**
      * The attribute this value collection is storing.
      *
-     * @var \Rinvex\Attributes\Models\Attribute
+     * @var \Marshmallow\Attributes\Models\Attribute
      */
     protected $attribute;
 
@@ -50,7 +50,7 @@ class ValueCollection extends EloquentCollection
      */
     public function add($values)
     {
-        if (! is_array($values) && ! $values instanceof BaseCollection) {
+        if (!is_array($values) && !$values instanceof BaseCollection) {
             $values = func_get_args();
         }
 
@@ -73,7 +73,7 @@ class ValueCollection extends EloquentCollection
      */
     public function replace($values)
     {
-        if (! is_array($values) && ! $values instanceof BaseCollection) {
+        if (!is_array($values) && !$values instanceof BaseCollection) {
             $values = func_get_args();
         }
 
@@ -130,7 +130,7 @@ class ValueCollection extends EloquentCollection
      *
      * @param \Illuminate\Support\Collection|array $values
      *
-     * @return \Rinvex\Attributes\Models\Value[]
+     * @return \Marshmallow\Attributes\Models\Value[]
      */
     protected function buildValues($values)
     {
@@ -140,7 +140,7 @@ class ValueCollection extends EloquentCollection
         // item into the data type object linked to this collection. Any null
         // value will be omitted here in order to avoid storing NULL values.
         foreach ($values as $value) {
-            if (! is_null($value)) {
+            if (!is_null($value)) {
                 $result[] = $this->buildValue($value);
             }
         }

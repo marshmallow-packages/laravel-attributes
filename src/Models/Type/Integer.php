@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rinvex\Attributes\Models\Type;
+namespace Marshmallow\Attributes\Models\Type;
 
-use Rinvex\Attributes\Models\Value;
+use Marshmallow\Attributes\Models\Value;
 
 /**
- * Rinvex\Attributes\Models\Type\Integer.
+ * Marshmallow\Attributes\Models\Type\Integer.
  *
  * @property int                 $id
  * @property int                 $content
@@ -16,16 +16,16 @@ use Rinvex\Attributes\Models\Value;
  * @property string              $entity_type
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
- * @property-read \Rinvex\Attributes\Models\Attribute           $attribute
+ * @property-read \Marshmallow\Attributes\Models\Attribute           $attribute
  * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $entity
  *
- * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Attributes\Models\Type\Integer whereAttributeId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Attributes\Models\Type\Integer whereContent($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Attributes\Models\Type\Integer whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Attributes\Models\Type\Integer whereEntityId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Attributes\Models\Type\Integer whereEntityType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Attributes\Models\Type\Integer whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Rinvex\Attributes\Models\Type\Integer whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Marshmallow\Attributes\Models\Type\Integer whereAttributeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Marshmallow\Attributes\Models\Type\Integer whereContent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Marshmallow\Attributes\Models\Type\Integer whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Marshmallow\Attributes\Models\Type\Integer whereEntityId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Marshmallow\Attributes\Models\Type\Integer whereEntityType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Marshmallow\Attributes\Models\Type\Integer whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Marshmallow\Attributes\Models\Type\Integer whereUpdatedAt($value)
  * @mixin \Eloquent
  */
 class Integer extends Value
@@ -47,12 +47,12 @@ class Integer extends Value
      */
     public function __construct(array $attributes = [])
     {
-        $this->setTable(config('rinvex.attributes.tables.attribute_integer_values'));
+        $this->setTable(config('marshmallow-attributes.tables.attribute_integer_values'));
         $this->mergeRules([
             'content' => 'required|integer',
-            'attribute_id' => 'required|integer|exists:'.config('rinvex.attributes.tables.attributes').',id',
+            'attribute_id' => 'required|integer|exists:' . config('marshmallow-attributes.tables.attributes') . ',id',
             'entity_id' => 'required|integer',
-            'entity_type' => 'required|string|strip_tags|max:150',
+            'entity_type' => 'required|string|max:150',
         ]);
 
         parent::__construct($attributes);

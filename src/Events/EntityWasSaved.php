@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rinvex\Attributes\Events;
+namespace Marshmallow\Attributes\Events;
 
 use Exception;
-use Rinvex\Attributes\Models\Value;
-use Rinvex\Attributes\Support\ValueCollection;
+use Marshmallow\Attributes\Models\Value;
+use Marshmallow\Attributes\Support\ValueCollection;
 use Illuminate\Database\Eloquent\Model as Entity;
 
 class EntityWasSaved
@@ -47,7 +47,7 @@ class EntityWasSaved
                             $value->setAttribute('entity_id', $entity->getKey());
                             $this->saveOrTrashValue($value);
                         }
-                    } elseif (! is_null($relationValue)) {
+                    } elseif (!is_null($relationValue)) {
                         // Set attribute value's entity_id since it's always null,
                         // @TODO: because when RelationBuilder::build is called very early
                         $relationValue->setAttribute('entity_id', $entity->getKey());
@@ -80,7 +80,7 @@ class EntityWasSaved
     /**
      * Save or trash the given value according to it's content.
      *
-     * @param \Rinvex\Attributes\Models\Value $value
+     * @param \Marshmallow\Attributes\Models\Value $value
      *
      * @return void
      */
@@ -89,7 +89,7 @@ class EntityWasSaved
         // In order to provide flexibility and let the values have their own
         // relationships, here we'll check if a value should be completely
         // saved with its relations or just save its own current state.
-        if (! is_null($value) && ! $this->trashValue($value)) {
+        if (!is_null($value) && !$this->trashValue($value)) {
             if ($value->shouldPush()) {
                 $value->push();
             } else {
@@ -101,13 +101,13 @@ class EntityWasSaved
     /**
      * Trash the given value.
      *
-     * @param \Rinvex\Attributes\Models\Value $value
+     * @param \Marshmallow\Attributes\Models\Value $value
      *
      * @return bool
      */
     protected function trashValue(Value $value): bool
     {
-        if (! is_null($value->getAttribute('content'))) {
+        if (!is_null($value->getAttribute('content'))) {
             return false;
         }
 

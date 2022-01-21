@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rinvex\Attributes\Models;
+namespace Marshmallow\Attributes\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Rinvex\Support\Traits\ValidatingTrait;
-use Rinvex\Attributes\Support\ValueCollection;
+use Marshmallow\Attributes\Traits\ValidatingTrait;
+use Marshmallow\Attributes\Support\ValueCollection;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 

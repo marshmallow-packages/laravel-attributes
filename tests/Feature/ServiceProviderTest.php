@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rinvex\Attributes\Tests\Feature;
+namespace Marshmallow\Attributes\Tests\Feature;
 
 use ReflectionClass;
 use PHPUnit\Framework\TestCase;
 use Illuminate\Container\Container;
 use Illuminate\Support\ServiceProvider;
-use Rinvex\Attributes\Providers\AttributesServiceProvider;
+use Marshmallow\Attributes\Providers\AttributesServiceProvider;
 
 class ServiceProviderTest extends TestCase
 {

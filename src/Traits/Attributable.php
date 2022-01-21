@@ -2,21 +2,21 @@
 
 declare(strict_types=1);
 
-namespace Rinvex\Attributes\Traits;
+namespace Marshmallow\Attributes\Traits;
 
 use Schema;
 use Closure;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use SuperClosure\Serializer;
-use Rinvex\Attributes\Models\Value;
-use Rinvex\Attributes\Models\Attribute;
+use Marshmallow\Attributes\Models\Value;
+use Marshmallow\Attributes\Models\Attribute;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Rinvex\Attributes\Events\EntityWasSaved;
-use Rinvex\Attributes\Scopes\EagerLoadScope;
-use Rinvex\Attributes\Events\EntityWasDeleted;
-use Rinvex\Attributes\Support\ValueCollection;
+use Marshmallow\Attributes\Events\EntityWasSaved;
+use Marshmallow\Attributes\Scopes\EagerLoadScope;
+use Marshmallow\Attributes\Events\EntityWasDeleted;
+use Marshmallow\Attributes\Support\ValueCollection;
 use Illuminate\Support\Collection as BaseCollection;
 
 trait Attributable
@@ -57,8 +57,8 @@ trait Attributable
     public static function bootAttributable()
     {
         static::addGlobalScope(new EagerLoadScope());
-        static::saved(EntityWasSaved::class.'@handle');
-        static::deleted(EntityWasDeleted::class.'@handle');
+        static::saved(EntityWasSaved::class . '@handle');
+        static::deleted(EntityWasDeleted::class . '@handle');
     }
 
     /**
@@ -70,7 +70,7 @@ trait Attributable
     {
         parent::bootIfNotBooted();
 
-        if (! $this->entityAttributeRelationsBooted) {
+        if (!$this->entityAttributeRelationsBooted) {
             $attributes = $this->getEntityAttributes();
 
             // We will manually add a relationship for every attribute registered
@@ -160,7 +160,7 @@ trait Attributable
         // In case any relation value is found, we will just provide it as is.
         // Otherwise, we will check if exists any attribute relation for the
         // given key. If so, we will load the relation calling its method.
-        if (is_null($value) && ! $this->relationLoaded($key) && $this->isEntityAttributeRelation($key)) {
+        if (is_null($value) && !$this->relationLoaded($key) && $this->isEntityAttributeRelation($key)) {
             $value = $this->getRelationshipFromMethod($key);
         }
 
@@ -191,7 +191,7 @@ trait Attributable
         $morphClass = $this->getMorphClass();
         static::$entityAttributes = static::$entityAttributes ?? collect();
 
-        if (! static::$entityAttributes->has($morphClass) && Schema::hasTable(config('rinvex.attributes.tables.attribute_entity'))) {
+        if (!static::$entityAttributes->has($morphClass) && Schema::hasTable(config('marshmallow-attributes.tables.attribute_entity'))) {
             $locale = app()->getLocale();
 
             /* This is a trial to implement per resource attributes,
@@ -204,11 +204,11 @@ trait Attributable
             $entityId = $routeParam && collect(class_uses_recursive(static::class))->contains(HashidsTrait::class) && ! is_numeric($routeParam)
                 ? optional(Hashids::decode($routeParam))[0] : $routeParam;
 
-            $attributes = app('rinvex.attributes.attribute_entity')->where('entity_type', $morphClass)->where('entity_id', $entityId)->get()->pluck('attribute_id');
+            $attributes = app('marshmallow-attributes.attribute_entity')->where('entity_type', $morphClass)->where('entity_id', $entityId)->get()->pluck('attribute_id');
              */
 
-            $attributes = app('rinvex.attributes.attribute_entity')->where('entity_type', $morphClass)->get()->pluck('attribute_id');
-            static::$entityAttributes->put($morphClass, app('rinvex.attributes.attribute')->whereIn('id', $attributes)->orderBy('sort_order', 'ASC')->orderBy("name->\${$locale}", 'ASC')->get()->keyBy('slug'));
+            $attributes = app('marshmallow-attributes.attribute_entity')->where('entity_type', $morphClass)->get()->pluck('attribute_id');
+            static::$entityAttributes->put($morphClass, app('marshmallow-attributes.attribute')->whereIn('id', $attributes)->orderBy('sort_order', 'ASC')->orderBy("name", 'ASC')->get()->keyBy('slug'));
         }
 
         return static::$entityAttributes->get($morphClass) ?? new Collection();
@@ -229,7 +229,7 @@ trait Attributable
             }
         }
 
-        if (count($this->getFillable()) > 0 && ! static::$unguarded) {
+        if (count($this->getFillable()) > 0 && !static::$unguarded) {
             return array_intersect_key($attributes, array_flip($this->getFillable()));
         }
 
@@ -356,7 +356,7 @@ trait Attributable
             return $value->pluck('content');
         }
 
-        return ! is_null($value) ? $value->getAttribute('content') : null;
+        return !is_null($value) ? $value->getAttribute('content') : null;
     }
 
     /**
@@ -422,14 +422,14 @@ trait Attributable
     /**
      * Set the entity attribute value.
      *
-     * @param \Rinvex\Attributes\Models\Attribute $attribute
+     * @param \Marshmallow\Attributes\Models\Attribute $attribute
      * @param mixed                               $value
      *
      * @return $this
      */
     protected function setEntityAttributeValue(Attribute $attribute, $value)
     {
-        if (! is_null($value) && ! $value instanceof Value) {
+        if (!is_null($value) && !$value instanceof Value) {
             $model = Attribute::getTypeModel($attribute->getAttribute('type'));
             $instance = new $model();
 

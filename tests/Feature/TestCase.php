@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rinvex\Attributes\Tests\Feature;
+namespace Marshmallow\Attributes\Tests\Feature;
 
-use Rinvex\Attributes\Models\Attribute;
-use Rinvex\Attributes\Tests\Stubs\User;
-use Rinvex\Attributes\Providers\AttributesServiceProvider;
+use Marshmallow\Attributes\Models\Attribute;
+use Marshmallow\Attributes\Tests\Stubs\User;
+use Marshmallow\Attributes\Providers\AttributesServiceProvider;
 
 class TestCase extends \Orchestra\Testbench\TestCase
 {
@@ -16,19 +16,19 @@ class TestCase extends \Orchestra\Testbench\TestCase
 
         $this->artisan('migrate', ['--database' => 'testing']);
         $this->loadLaravelMigrations('testing');
-        $this->withFactories(__DIR__.'/Factories');
+        $this->withFactories(__DIR__ . '/Factories');
 
         // Registering the core type map
         Attribute::typeMap([
-            'text' => \Rinvex\Attributes\Models\Type\Text::class,
-            'bool' => \Rinvex\Attributes\Models\Type\Boolean::class,
-            'integer' => \Rinvex\Attributes\Models\Type\Integer::class,
-            'varchar' => \Rinvex\Attributes\Models\Type\Varchar::class,
-            'datetime' => \Rinvex\Attributes\Models\Type\Datetime::class,
+            'text' => \Marshmallow\Attributes\Models\Type\Text::class,
+            'bool' => \Marshmallow\Attributes\Models\Type\Boolean::class,
+            'integer' => \Marshmallow\Attributes\Models\Type\Integer::class,
+            'varchar' => \Marshmallow\Attributes\Models\Type\Varchar::class,
+            'datetime' => \Marshmallow\Attributes\Models\Type\Datetime::class,
         ]);
 
         // Push your entity fully qualified namespace
-        app('rinvex.attributes.entities')->push(User::class);
+        app('marshmallow-attributes.entities')->push(User::class);
     }
 
     protected function getEnvironmentSetUp($app)

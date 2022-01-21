@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rinvex\Attributes\Scopes;
+namespace Marshmallow\Attributes\Scopes;
 
 use Illuminate\Support\Arr;
 use Illuminate\Database\Eloquent\Scope;
