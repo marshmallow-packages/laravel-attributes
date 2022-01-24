@@ -481,14 +481,14 @@ trait Attributable
      * Scope query with the given entity attribute.
      *
      * @param \Illuminate\Database\Eloquent\Builder $builder
-     * @param string                                $key
+     * @param string                                $attribute
      * @param mixed                                 $value
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeHasAttribute(Builder $builder, string $key, $value): Builder
+    public function scopeHasAttribute(Builder $builder, string $attribute, $value): Builder
     {
-        return $builder->whereHas($key, function (Builder $builder) use ($value) {
+        return $builder->whereHas($attribute, function (Builder $builder) use ($value) {
             $builder->where('content', $value)->where('entity_type', $this->getMorphClass());
         });
     }

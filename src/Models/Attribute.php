@@ -226,16 +226,14 @@ class Attribute extends Model implements Sortable
 
     /**
      * Get the entities attached to this attribute.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function entities(): HasMany
+    public function entities()
     {
         return $this->hasMany(config('marshmallow-attributes.models.attribute_entity'), 'attribute_id', 'id');
     }
 
     /**
-     * Get the entities attached to this attribute.
+     * Get the values attached to this attribute.
      *
      * @param string $value
      *
@@ -246,13 +244,25 @@ class Attribute extends Model implements Sortable
         return $this->hasMany($value, 'attribute_id', 'id');
     }
 
+    // /**
+    //  * Get the entities attached to this attribute.
+    //  *
+    //  * @return \Illuminate\Database\Eloquent\Relations\HasMany
+    //  */
+    // public function attributeEntities(): HasMany
+    // {
+    //     return parent::entities();
+    // }
+
     /**
-     * Get the entities attached to this attribute.
+     * Get the attached models of the given class to this attribute.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @param string $class
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
      */
-    public function attributeEntities(): HasMany
+    public function entries(string $class): MorphToMany
     {
-        return parent::entities();
+        return $this->morphedByMany($class, 'entity', config('marshmallow-attributes.tables.attribute_entity'), 'attribute_id', 'entity_id', 'id', 'id');
     }
 }
