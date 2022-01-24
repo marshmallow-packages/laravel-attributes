@@ -9,9 +9,11 @@ use Illuminate\Support\Str;
 use SuperClosure\Serializer;
 use Marshmallow\Attributes\Models\Value;
 use Marshmallow\Attributes\Models\Attribute;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Marshmallow\Attributes\Events\EntityWasSaved;
+use Illuminate\Database\Eloquent\Model;
 use Marshmallow\Attributes\Scopes\EagerLoadScope;
 use Marshmallow\Attributes\Events\EntityWasDeleted;
 use Marshmallow\Attributes\Support\ValueCollection;
@@ -54,9 +56,76 @@ trait Attributable
      */
     public static function bootAttributable()
     {
-        static::addGlobalScope(new EagerLoadScope());
+        // static::addGlobalScope(new EagerLoadScope());
+        static::addGlobalScope('eav', function (Builder $builder) {
+            // Get entity attributes for this model
+            $eagerLoads = $builder->getEagerLoads();
+            $entityAttributes = static::entityAttributes();
+
+            // If there is any eager loading with the name 'eav', we will replace it with
+            // all the registered properties for the entity. We'll simulate as if the
+            // user manually added all of these attributes to the $with property.
+            if (array_key_exists('eav', $eagerLoads)) {
+                $builder->without('eav');
+
+                //$entityAttributes->groupBy('type')->each(function () {
+                //
+                //});
+
+                // Attach dynamic relations to this model
+                $entityAttributes->each(fn ($attribute) => static::resolveRelationUsing($attribute->getAttribute('slug'), function (Model $model) use ($attribute) {
+                    // Determine the relationship type, single value or collection
+                    $method = $attribute->is_collection ? 'hasMany' : 'hasOne';
+
+                    // Build a relationship between the given model and attribute
+                    $relation = $model->{$method}($attribute->getTypeModel($attribute->getAttribute('type')), 'entity_id', $model->getKeyName());
+
+                    // Since an attribute could be attached to multiple entities, then values could have
+                    // same entity ID, but for different entity types, so we need to add type where
+                    // clause to fetch only values related to the given entity ID & entity type.
+                    $relation->where('entity_type', $model->getMorphClass());
+
+                    // We add a where clause in order to fetch only the elements that are
+                    // related to the given attribute. If no condition is set, it will
+                    // fetch all the value rows related to the current entity.
+                    return $relation->where($attribute->getForeignKey(), $attribute->getKey());
+                }));
+
+                // Call dynamic relations of this model
+                $entityAttributes->pluck('slug')->each(fn ($attribute) => $builder->with($attribute));
+            }
+        });
+
         static::saved(EntityWasSaved::class . '@handle');
         static::deleted(EntityWasDeleted::class . '@handle');
+    }
+
+    /**
+     * Retrieve entity attributes for this model.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    protected static function entityAttributes(): Collection
+    {
+        return static::$entityAttributes ?? static::$entityAttributes = app('marshmallow-attributes.attribute')->join(config('marshmallow-attributes.tables.attribute_entity'), 'attributes.id', '=', 'attribute_entity.attribute_id')->where('attribute_entity.entity_type', static::morphClass())->get();
+    }
+
+    /**
+     * Get the class name for polymorphic relations.
+     *
+     * @notice This is just a static clone of `HasRelationships::getMorphClass`
+     *
+     * @return string
+     */
+    protected static function morphClass()
+    {
+        $morphMap = Relation::morphMap();
+
+        if (!empty($morphMap) && in_array(static::class, $morphMap)) {
+            return array_search(static::class, $morphMap, true);
+        }
+
+        return static::class;
     }
 
     /**
@@ -191,8 +260,6 @@ trait Attributable
         static::$entityAttributes = static::$entityAttributes ?? collect();
 
         if (!static::$entityAttributes->has($morphClass) && Schema::hasTable(config('marshmallow-attributes.tables.attribute_entity'))) {
-            $locale = app()->getLocale();
-
             /* This is a trial to implement per resource attributes,
                it's working but I don't like current implementation.
             $routeParam = request()->route($morphClass);
