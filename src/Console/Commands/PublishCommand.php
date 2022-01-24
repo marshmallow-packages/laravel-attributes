@@ -32,7 +32,7 @@ class PublishCommand extends Command
         $this->alert($this->description);
 
         $this->artisanCall(
-            'vendor:publish --provider="Marshmallow\Attributes\Providers\AttributesServiceProvider"',
+            'vendor:publish  --provider="Marshmallow\Attributes\Providers\AttributesServiceProvider"',
             'Assets are published.'
         );
 

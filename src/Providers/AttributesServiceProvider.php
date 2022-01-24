@@ -18,7 +18,7 @@ class AttributesServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
 
         $this->mergeConfigFrom(
-            __DIR__ . '/../../config/config.php',
+            __DIR__ . '/../../config/marshmallow-attributes.php',
             'marshmallow-attributes'
         );
 
@@ -53,7 +53,7 @@ class AttributesServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
 
         $this->publishes([
-            __DIR__ . '/../../config/config.php' => config_path('marshmallow-attributes.php'),
+            __DIR__ . '/../../config/marshmallow-attributes.php' => config_path('marshmallow-attributes.php'),
         ]);
     }
 }
