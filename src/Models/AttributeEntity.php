@@ -42,7 +42,7 @@ class AttributeEntity extends Model
      */
     public function __construct(array $attributes = [])
     {
-        $this->setTable(config('rinvex.attributes.tables.attribute_entity'));
+        $this->setTable(config('marshmallow-attributes.tables.attribute_entity'));
         parent::__construct($attributes);
     }
 
