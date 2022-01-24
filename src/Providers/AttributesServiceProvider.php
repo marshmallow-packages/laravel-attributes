@@ -2,6 +2,7 @@
 
 namespace Marshmallow\Attributes\Providers;
 
+use Illuminate\Support\Str;
 use Illuminate\Support\ServiceProvider;
 use Marshmallow\Attributes\Models\Attribute;
 use Marshmallow\Attributes\Models\AttributeEntity;
@@ -22,16 +23,25 @@ class AttributesServiceProvider extends ServiceProvider
             'marshmallow-attributes'
         );
 
+        $this->registerModels([
+            'marshmallow-attributes.attribute' => Attribute::class,
+            'marshmallow-attributes.attribute_entity' => AttributeEntity::class,
+        ]);
+
         $this->commands([
             PublishCommand::class,
         ]);
 
-        $this->configureAttributes();
+        $this->registerEntities();
+        // $this->configureAttributes();
     }
 
     protected function registerEntities()
     {
-        app('marshmallow-attributes.entities')->push('entities');
+        // Register attributes entities
+        $this->app->singleton('marshmallow-attributes.entities', function ($app) {
+            return collect();
+        });
     }
 
     protected function configureAttributes()
@@ -55,5 +65,20 @@ class AttributesServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../../config/marshmallow-attributes.php' => config_path('marshmallow-attributes.php'),
         ]);
+    }
+
+    /**
+     * Register models into IoC.
+     *
+     * @param array $models
+     *
+     * @return void
+     */
+    protected function registerModels(array $models): void
+    {
+        foreach ($models as $service => $class) {
+            $this->app->singleton($service, $model = $this->app['config'][Str::replaceLast('.', '.models.', $service)]);
+            $model === $class || $this->app->alias($service, $class);
+        }
     }
 }
