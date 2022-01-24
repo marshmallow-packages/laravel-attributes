@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Marshmallow\Attributes\Events;
 
 use Marshmallow\Attributes\Models\Attribute;

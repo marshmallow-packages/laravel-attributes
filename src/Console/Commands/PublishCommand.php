@@ -1,10 +1,10 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Marshmallow\Attributes\Console\Commands;
 
+use Exception;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Artisan;
 
 class PublishCommand extends Command
 {
@@ -13,7 +13,7 @@ class PublishCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'marshmallow:publish:attributes {--f|force : Overwrite any existing files.} {--r|resource=* : Specify which resources to publish.}';
+    protected $signature = 'marshmallow-attributes:install {--f|force : Overwrite any existing files.} {--r|resource=* : Specify which resources to publish.}';
 
     /**
      * The console command description.
@@ -31,10 +31,23 @@ class PublishCommand extends Command
     {
         $this->alert($this->description);
 
-        collect($this->option('resource') ?: ['config', 'migrations'])->each(function ($resource) {
-            $this->call('vendor:publish', ['--tag' => "marshmallow/attributes::{$resource}", '--force' => $this->option('force')]);
-        });
+        $this->artisanCall(
+            'vendor:publish --provider="Marshmallow\Attributes\Providers\AttributesServiceProvider"',
+            'Assets are published.'
+        );
 
-        $this->line('');
+        $this->artisanCall(
+            'migrate',
+            'Database has been migrated.'
+        );
+    }
+
+    protected function artisanCall($command, $info = null)
+    {
+        Artisan::call($command);
+
+        if ($info) {
+            $this->info($info);
+        }
     }
 }

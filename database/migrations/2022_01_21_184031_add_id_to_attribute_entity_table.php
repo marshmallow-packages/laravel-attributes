@@ -13,7 +13,7 @@ class AddIdToAttributeEntityTable extends Migration
      */
     public function up()
     {
-        Schema::table('attribute_entity', function (Blueprint $table) {
+        Schema::table(config('marshmallow-attributes.tables.attribute_entity'), function (Blueprint $table) {
             $table->increments('id')->first();
         });
     }
@@ -25,7 +25,7 @@ class AddIdToAttributeEntityTable extends Migration
      */
     public function down()
     {
-        Schema::table('attribute_entity', function (Blueprint $table) {
+        Schema::table(config('marshmallow-attributes.tables.attribute_entity'), function (Blueprint $table) {
             $table->dropColumn('id');
         });
     }

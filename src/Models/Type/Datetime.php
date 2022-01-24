@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Marshmallow\Attributes\Models\Type;
 
 use Marshmallow\Attributes\Models\Value;

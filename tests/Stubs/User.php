@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Marshmallow\Attributes\Tests\Stubs;
 
 use Illuminate\Database\Eloquent\Model;

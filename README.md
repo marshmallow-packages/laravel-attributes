@@ -2,11 +2,11 @@
 
 **Marshmallow Attributes** is a robust, intelligent, and integrated Entity-Attribute-Value model (EAV) implementation for Laravel Eloquent, with powerful underlying for managing entity attributes implicitly as relations with ease. It utilizes the power of Laravel Eloquent, with smooth and seamless integration.
 
-[![Packagist](https://img.shields.io/packagist/v/marshmallow/laravel-attributes.svg?label=Packagist&style=flat-square)](https://packagist.org/packages/marshmallow/laravel-attributes)
-[![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/marshmallow/laravel-attributes.svg?label=Scrutinizer&style=flat-square)](https://scrutinizer-ci.com/g/marshmallow/laravel-attributes/)
-[![Travis](https://img.shields.io/travis/marshmallow/laravel-attributes.svg?label=TravisCI&style=flat-square)](https://travis-ci.org/marshmallow/laravel-attributes)
+[![Packagist](https://img.shields.io/packagist/v/marshmallow/marshmallow-attributes.svg?label=Packagist&style=flat-square)](https://packagist.org/packages/marshmallow/marshmallow-attributes)
+[![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/marshmallow/marshmallow-attributes.svg?label=Scrutinizer&style=flat-square)](https://scrutinizer-ci.com/g/marshmallow/marshmallow-attributes/)
+[![Travis](https://img.shields.io/travis/marshmallow/marshmallow-attributes.svg?label=TravisCI&style=flat-square)](https://travis-ci.org/marshmallow/marshmallow-attributes)
 [![StyleCI](https://styleci.io/repos/87620509/shield)](https://styleci.io/repos/87620509)
-[![License](https://img.shields.io/packagist/l/marshmallow/laravel-attributes.svg?label=License&style=flat-square)](https://github.com/marshmallow/laravel-attributes/blob/develop/LICENSE)
+[![License](https://img.shields.io/packagist/l/marshmallow/marshmallow-attributes.svg?label=License&style=flat-square)](https://github.com/marshmallow/marshmallow-attributes/blob/develop/LICENSE)
 
 ## Credits notice
 
@@ -150,16 +150,10 @@ This class creates the Eloquent relations to the attribute values based on their
 2. Publish resources (migrations and config files):
 
    ```shell
-   php artisan marshmallow:publish:attributes
+   php artisan marshmallow-attributes:install
    ```
 
-3. Execute migrations via the following command:
-
-   ```shell
-   php artisan marshmallow:migrate:attributes
-   ```
-
-4. Done!
+3. Done!
 
 ## Usage
 
