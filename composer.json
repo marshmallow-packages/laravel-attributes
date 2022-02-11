@@ -7,7 +7,7 @@
     "php": "^8.0|^8.1",
     "jeremeamia/superclosure": "^2.4.0",
     "marshmallow/translatable": "^v1.20.0",
-    "rinvex/tmp-watson-validating": "^6.0.4",
+    "watson/validating": "^7.0.0",
     "spatie/eloquent-sortable": "^4.0",
     "spatie/laravel-sluggable": "^3.3.0"
   },
