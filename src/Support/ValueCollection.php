@@ -2,6 +2,7 @@
 
 namespace Marshmallow\Attributes\Support;
 
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Marshmallow\Attributes\Models\Attribute;
 use Illuminate\Support\Collection as BaseCollection;
@@ -134,10 +135,25 @@ class ValueCollection extends EloquentCollection
     {
         $result = [];
 
+        $test = json_decode($values[0]);
+        if (is_array($test)) {
+            $values = $test;
+        } else {
+            $test = explode(',', $values[0]);
+            $values = $test;
+        }
+
         // We will iterate through the entire array of values transforming every
         // item into the data type object linked to this collection. Any null
         // value will be omitted here in order to avoid storing NULL values.
         foreach ($values as $value) {
+            if (is_numeric($value)) {
+                $model = Attribute::getTypeModel($this->attribute->getAttribute('type'));
+                $value = $model::find($value);
+                $value = $value['content'];
+            }
+            $value = trim($value);
+
             if (!is_null($value)) {
                 $result[] = $this->buildValue($value);
             }
