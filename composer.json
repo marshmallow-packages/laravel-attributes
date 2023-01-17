@@ -4,7 +4,7 @@
   "license": "MIT",
   "homepage": "https://marshmallow.com",
   "require": {
-    "php": "^8.0|^8.1",
+    "php": "^8.0",
     "jeremeamia/superclosure": "^2.4.0",
     "marshmallow/translatable": "^v1.20.0",
     "watson/validating": "^7.0.0",
@@ -13,7 +13,7 @@
   },
   "require-dev": {
     "codedungeon/phpunit-result-printer": "^0.31.0",
-    "orchestra/testbench": "^v6.24.0",
+    "orchestra/testbench": "^v6.24.0|^v7.0|^v8.0",
     "phpunit/phpunit": "^9.5.12"
   },
   "autoload": {
